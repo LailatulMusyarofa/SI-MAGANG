@@ -64,22 +64,43 @@ class AuthController extends Controller
         return redirect()->route('lengkapi_data')->with('success', 'Registrasi berhasil, silakan lengkapi data.');
     }
 
-    public function logout()
+   public function logout()
     {
         try {
             AccessHelper::clearAccessSession();
             Auth::logout();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Anda berhasil logut dari sistem.'
-            ], 200);
-        } catch (\Throwable $th) {
-            //throw $th;
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat logout dari sistem.'
-            ], 500);
-        }
+            $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login'); // ⬅ ini redirect ke halaman login
+    } catch (\Throwable $th) {
+        return redirect()->back()->withErrors([
+            'logout' => 'Terjadi kesalahan saat logout dari sistem.'
+        ]);
+    }
+
+
+
+
+
+    // public function logout()
+    // {
+    //     try {
+    //         AccessHelper::clearAccessSession();
+    //         Auth::logout();
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Anda berhasil logut dari sistem.'
+    //         ], 200);
+    //     } catch (\Throwable $th) {
+    //         //throw $th;
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Terjadi kesalahan saat logout dari sistem.'
+    //         ], 500);
+    //     }
+    // }
     }
 }
