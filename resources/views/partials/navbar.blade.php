@@ -168,7 +168,18 @@
                     <div class="dropdown-divider"></div>
                     <a href="./settings.html" class="dropdown-item">Settings</a> -->
                     <a href="{{ route('user.setting') }}" class="dropdown-item">Personalisasi Akun</a>
-                    <button class="dropdown-item" onclick="logoutNow()">Keluar</button>
+                    <!-- Trigger logout -->
+                        <a href="#" class="dropdown-item"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Keluar
+                        </a>
+
+                        <!-- Form logout tersembunyi -->
+                        <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        </div>
+                    <!-- <button class="dropdown-item" onclick="logoutNow()">Keluar</button> -->
                 </div>
 
             </div>
