@@ -108,6 +108,10 @@
                     <li><a class="nav-link" href="{{ route('nota_dinas.daftar') }}"><span class="mdi mdi-note-text-outline" style="font-size: 24px; margin-right: 4px;"></span>Nota Dinas Magang</a></li>
                     <li><a class="nav-link" href="{{ route('proposal_final.daftar') }}"><span class="mdi mdi-decagram" style="font-size: 24px; margin-right: 4px;"></span>Laporan & Sertifikat</a></li>
                     <li><a class="nav-link" href="{{ route('master_petugas') }}"><span class="mdi mdi-account-group" style="font-size: 24px; margin-right: 4px;"></span>Kelola Penilai</a></li>
+                    <li><a class="nav-link" href="{{ route('master_keluar') }}"><button type="button" class="btn btn-outline-danger" onclick="logoutNow()"><span class="mdi mdi-logout" style="font-size: 24px; margin-right: 4px;"></span>Keluar</button></a></li>
+
+
+                    
                 @elseif(Auth::user()->role_id == 2)
                     <!-- Menu untuk User (Instansi) -->
                     <!-- <li><a class="nav-link" href="{{ route('home') }}"><span class="mdi mdi-home" style="font-size: 24px; margin-right: 4px;"></span> Beranda</a></li> -->

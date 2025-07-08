@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Auth;
 
 
 Route::middleware('guest')->group(function () {
@@ -202,3 +203,10 @@ Route::post('password/reset', function (Illuminate\Http\Request $request) {
                 ? redirect()->route('login')->with('status', __($status))
                 : back()->withErrors(['email' => [($status)]]);
 })->name('password.update');
+
+
+// Logout route
+Route::get('/keluar', function () {
+    Auth::logout();
+    return redirect('/'); // Ubah ke route login atau beranda sesuai kebutuhanmu
+})->name('master_keluar');
