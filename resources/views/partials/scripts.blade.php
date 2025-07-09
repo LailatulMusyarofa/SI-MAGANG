@@ -1,6 +1,6 @@
 <!-- Tabler Core -->
-<script src="{{ asset('dist/js/tabler.min.js')}}" defer></script>
-<script src="{{ asset('dist/js/demo.min.js')}}" defer></script>
+<script src="{{ asset('dist/js/tabler.min.js')}}"></script>
+<script src="{{ asset('dist/js/demo.min.js')}}"></script>
 
 <!-- Import Swal -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
