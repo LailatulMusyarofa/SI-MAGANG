@@ -1,5 +1,5 @@
 <li class="nav-item dropdown"><!-- MODIFIKASI -->
-                   <a href="#" class="nav-link" data-bs-toggle="dropdown" aria-label="Notifications">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-label="Notifications">
 
                 <!-- Icon Bell -->
                 <svg class="icon icon-tabler icon-tabler-bell" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -47,3 +47,4 @@
     </div>
   </div>
 </li>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
