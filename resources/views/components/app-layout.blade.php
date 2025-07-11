@@ -10,6 +10,7 @@
 <html lang="en">
 
 @include('partials.head', ['pageTitle' => $pageTitle])
+@stack('scripts')
 
 
 
