@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Permohonan Magang Baru dari Universitas Brawijaya",
+    "message": "3 Permohonan Magang baru sedang menunggu persetujuan",
+    "status": "blue"
+  },
+  {
+    "title": "Dokumen Perlu Diverifikasi",
+    "message": "Ahmad Rizki - dokumen CV perlu diverifikasi ulang",
+    "status": "gray"
+  },
+  {
+    "title": "Magang selesai",
+    "message": "Sari Dewi telah menyelesaikan program magang",
+    "status": "green"
+  }
+]

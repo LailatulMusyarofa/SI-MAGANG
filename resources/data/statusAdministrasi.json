@@ -1,0 +1,13 @@
+{
+  "categories": ["Pendaftar", "Verifikasi Dokumen", "Penempatan Bidang", "Orientasi", "Pelaksanaan", "Evaluasi", "Sertifikat"],
+  "series": [
+    {
+      "name": "Selesai",
+      "data": [44, 55, 41, 37, 22, 43, 21]
+    },
+    {
+      "name": "Pending",
+      "data": [53, 32, 33, 52, 13, 43, 32]
+    }
+  ]
+}
