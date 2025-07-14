@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
 
 Route::middleware('guest')->group(function () {
@@ -210,3 +212,13 @@ Route::get('/keluar', function () {
     Auth::logout();
     return redirect('/'); // Ubah ke route login atau beranda sesuai kebutuhanmu
 })->name('master_keluar');
+
+// ini json statusAdministrasi
+Route::get('/statusAdministrasi', function () {
+    $path = resource_path('data/statusAdministrasi.json');
+    if (!File::exists($path)) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+    $data = File::get($path);
+    return response($data, 200)->header('Content-Type', 'application/json');
+});
