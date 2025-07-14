@@ -15,17 +15,20 @@
 
     <div class="page-body">
         <div class="container-xl">
-            <div class="row row-deck row-cards">
-                <div class="col-12">
+            <div class="row justify-content-center">
+            <div class="col-12 col-md-12 col-lg-11">
                     <div class="d-block">
-                        <h3 class="mb-2">Selamat Datang!</h3>
-                        <h1 class="mb-1 fw-bold">Tanggal saat ini</h1>
-                        <h1 class="mt-0">{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</h1>
+                        <div class="col-12 bg-light p-7 rounded">
+                            <h1 class="fw-bold fst-italic mb-4" style="font-size: 2.5rem;">Selamat Datang</h1>
+                            <p class="fs-2 text-dark">
+                            {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}
+                            </p>
+                        </div>
 
                         <!-- card -->
                         <div class="row row-deck">
-                            <div class="col-md-3">
-                            <div class="card shadow-sm border-0" style="border-radius: 50px;">
+                            <div class="col-12 col-sm-6 col-md-3 mb-3">
+                            <div class="card shadow-sm border-0 h-100" style="border-radius: 50px;">
                                 <div class="card-body text-center" style="background-color:rgb(227, 255, 233); border-radius: 10px;">
                                 <p class="card-text text-muted">Permohonan Ditangani</p>
                                 <a href="#" class="btn btn-primary btn-sm"></a>
@@ -54,8 +57,8 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="col-md-3">
-                            <div class="card shadow-sm border-0" style="border-radius: 50px;">
+                            <div class="col-12 col-sm-6 col-md-3 mb-3">
+                            <div class="card shadow-sm border-0 h-100" style="border-radius: 50px;">
                                 <div class="card-body text-center" style="background-color:rgb(255, 239, 188);">
                                 <p class="card-text text-muted">Permohonan Pending</p>
                                 <a href="#" class="btn btn-primary btn-sm"></a>
@@ -84,8 +87,8 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="col-md-3">
-                            <div class="card shadow-sm border-0" style="border-radius: 50px;">
+                            <div class="col-12 col-sm-6 col-md-3 mb-3">
+                            <div class="card shadow-sm border-0 h-100" style="border-radius: 50px;">
                                 <div class="card-body text-center" style="background-color:rgb(192, 235, 253);">
                                 <p class="card-text text-muted">Total Magang Aktif</p>
                                 <a href="#" class="btn btn-primary btn-sm"></a>
@@ -114,8 +117,8 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="col-md-3">
-                            <div class="card shadow-sm border-0" style="border-radius: 50px;">
+                            <div class="col-12 col-sm-6 col-md-3 mb-3">
+                            <div class="card shadow-sm border-0 h-100" style="border-radius: 50px;">
                                 <div class="card-body text-center" style="background-color:rgb(227, 255, 233);">
                                 <p class="card-text text-muted">Lulus Bulan Ini</p>
                                 <a href="#" class="btn btn-primary btn-sm"></a>
@@ -147,8 +150,8 @@
                         <!-- tahun pendaftaran magang -->
                         <!-- Container -->
                         <!-- Header -->
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-xl font-semibold text-gray-800">Grafik Pendaftaran Magang</h2>
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-2">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-0">Grafik Pendaftaran Magang</h2>
                             <div class="flex items-center gap-2">
                             <button class="bg-gray-100 px-2 py-1 rounded text-gray-600 text-sm">&lt;</button>
                             <span class="text-gray-700 font-medium">2025</span>
@@ -157,36 +160,86 @@
                         </div>
 
                         <!-- Card Chart -->
-                        <div class="card">
+                        <div class="card mb-4">
                             <div class="card-body">
-                            <div id="chart-demo-area" class="position-relative "></div>
+                            <div id="chart-demo-area" class="position-relative w-100" style="min-height:300px"></div>
                             </div>
                         </div>
                         <!-- Wrapper Grid -->
-                        <div class="grid grid-cols-12 gap-6">
+                         <div class="row">
+                        <!-- Kolom kiri: 2 grafik sejajar -->
+                        <div class="col-12 col-lg-9">
+        <div class="row h-100">
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="text-lg font-semibold mb-4">Magang Aktif per Bidang</h2>
+                        <div id="chart-demo-line" class="w-100" style="min-height:300px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="text-lg font-semibold mb-4">Magang Lulus per Bidang</h2>
+                        <div id="chart-demo-pie" class="w-100" style="min-height:300px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                        <!-- Kolom kanan: 2 kartu vertikal -->
+                        <div class="col-12 col-lg-3 d-flex flex-column">
+    <!-- Kartu 1 -->
+    <div class="mb-3">
+        <div class="card h-100 shadow-sm" style="border-radius: 12px; background-color: #f1f5f9;">
+            <div class="card-body text-center py-4">
+                <p class="mb-1 text-muted">Tingkat Penerimaan</p>
+                <p class="fw-bold" style="font-size: 1.8rem;">78%</p>
+                <p class="text-muted mb-0">Dari total pendaftar</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kartu 2 -->
+    <div>
+        <div class="card h-100 shadow-sm" style="border-radius: 12px; background-color: #f1f5f9;">
+            <div class="card-body text-center py-4">
+                <p class="mb-1 text-muted">Rata-rata Durasi</p>
+                <p class="fw-bold" style="font-size: 1.8rem;">3<span style="font-weight: normal;">/bulan</span></p>
+                <p class="text-muted mb-0">Lama program magang</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    </div>
+
+                        <!-- <div class="grid grid-cols-12 gap-6"> -->
 
                             <!-- Kartu 1: Grafik Line -->
-                            <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                            <!-- <div class="col-span-12 md:col-span-6 lg:col-span-4">
                             <div class="card h-[400px] w-full">
                                 <div class="card-body">
                                 <h2 class="text-lg font-semibold mb-4">Magang Aktif per Bidang</h2>
                                 <div id="chart-demo-line" class="w-full h-[300px]"></div>
                                 </div>
                             </div>
-                            </div>
+                            </div> -->
                         
                         <!-- Kartu 2: Donut Chart -->
-                        <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                        <!-- <div class="col-span-12 md:col-span-6 lg:col-span-4">
                         <div class="card h-[400px] w-full">
                             <div class="card-body">
                             <h2 class="text-lg font-semibold mb-4">Magang Lulus per Bidang</h2>
                             <div id="chart-demo-pie" class="w-full h-[300px]"></div>
                             </div>
                         </div>
-                        </div>
+                        </div> -->
 
                            <!-- Kartu 3: Teks atau Statistik -->
-                        <div class="col-span-12 md:col-span-6 lg:col-span-4">
+                        <!-- <div class="col-span-12 md:col-span-6 lg:col-span-4">
                         <div class="card h-[400px] w-full">
                             <div class="card-body text-center flex flex-col justify-center">
                             <h1 class="text-4xl font-bold text-blue-500 mb-2">3.2 bulan</h1>
@@ -202,7 +255,7 @@
                             </div>
                         </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Script Chart.js -->
                     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
