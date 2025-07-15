@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+
 
 
 Route::middleware('guest')->group(function () {
@@ -205,6 +207,10 @@ Route::post('password/reset', function (Illuminate\Http\Request $request) {
                 ? redirect()->route('login')->with('status', __($status))
                 : back()->withErrors(['email' => [($status)]]);
 })->name('password.update');
+
+
+// daftar administrator
+Route::get('/master_administrasi', [AdministrasiController::class, 'master'])->name('master_administrasi');
 
 
 // Logout route
