@@ -9,7 +9,7 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    fetch('/statusAdministrasi')
+    fetch('/chart-data')
       .then(response => response.json())
       .then(data => {
         const chart = new ApexCharts(document.getElementById('chart-demo-bar'), {
@@ -30,7 +30,16 @@
           },
           dataLabels: { enabled: false },
           series: data.series,
-          tooltip: { theme: 'dark' },
+          tooltip: {
+            theme: 'dark',
+            y: {
+              formatter: function (val, opts) {
+                const kategori = opts.w.config.xaxis.categories[opts.dataPointIndex];
+                const seriesName = opts.w.globals.seriesNames[opts.seriesIndex];
+                return + val + " Peserta";
+              }
+            }
+          },
           grid: {
             padding: { top: -20, right: 0, left: 8, bottom: -4 },
             strokeDashArray: 4,
@@ -38,13 +47,15 @@
           xaxis: {
             labels: {
               padding: 0,
-              formatter: val => val + "K",
+              formatter: val => val,
             },
             tooltip: { enabled: false },
             axisBorder: { show: false },
             categories: data.categories
           },
-          yaxis: { labels: { padding: 4 } },
+          yaxis: {
+            labels: { padding: 4 }
+          },
           colors: ['#5858D6', '#3498db'],
           legend: {
             show: true,

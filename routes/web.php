@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\GrafikStatusController;
+use App\Http\Controllers\HomeController;
+
 
 
 
@@ -236,3 +239,7 @@ Route::get('/statusAdministrasi', function () {
     $data = File::get($path);
     return response($data, 200)->header('Content-Type', 'application/json');
 });
+
+
+// ini grafik administrasi peserta
+Route::get('/chart-data', [GrafikStatusController::class, 'chartData'])->name('chart.data');
