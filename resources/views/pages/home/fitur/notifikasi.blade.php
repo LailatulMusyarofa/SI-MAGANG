@@ -27,21 +27,24 @@
       <div class="card-body p-0">
         <div class="list-group list-group-flush list-group-hoverable">
           <!-- Notifikasi pake json -->
-          @foreach ($notifikasi ?? [] as $item)
-          <div class="list-group-item">
-            <div class="row align-items-center">
-              <div class="col-auto">
-                <span class="status-dot status-dot-animated bg-{{ $item['status'] }}"></span>
-              </div>
-              <div class="col text-truncate">
-                <a href="#" class="text-body d-block fw-bold">{{ $item['title'] }}</a>
-                <div class="text-truncate mt-n1" style="color: #6c757d;">
-                 {{ $item['message'] }}
-                </div>
-              </div>
-            </div>
-          </div>
-          @endforeach
+          @foreach ($notifikasi as $item)
+  <div class="list-group-item">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <span class="status-dot status-dot-animated bg-red"></span>
+      </div>
+      <div class="col text-truncate">
+        <a href="#" class="text-body d-block fw-bold">
+          Permintaan dari {{ $item->ditandatangani_oleh }}
+        </a>
+        <div class="text-truncate mt-n1 text-secondary">
+          No: {{ $item->nomor_surat_permintaan }} | Tanggal: {{ $item->tanggal_surat_permintaan }}
+        </div>
+      </div>
+    </div>
+  </div>
+@endforeach
+
         </div>
       </div>
     </div>

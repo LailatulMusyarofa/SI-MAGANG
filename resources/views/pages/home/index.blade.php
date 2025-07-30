@@ -7,10 +7,16 @@
                 <!-- NOTIFIKASI -->
             <div class="col-auto ms-auto d-flex align-items-center">
                 <ul class="navbar-nav">
-                    @include('pages.home.fitur.notifikasi')
-                </ul>
+                    @php
+                        $user = Auth::user();
+                    @endphp
+
+                    @if ($user && $user->id === 1)
+                        @include('pages.home.fitur.notifikasi')
+                    @endif
+                    </ul>                      
+                </div>
             </div>
-        </div>
     </x-page-header>
 
     <div class="page-body">

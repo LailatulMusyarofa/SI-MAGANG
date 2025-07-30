@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GrafikStatusController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProposalMasukController;
+use App\Http\Controllers\UserPermintaanMagangController;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\RingkasanController;
+use App\Http\Controllers\NotifikasiController;
+
+
 
 
 
@@ -33,7 +40,7 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware(['auth', 'check-access', 'authorize-access'])->group(function () {
-    Route::get('beranda', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/beranda', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('menu/get-data-all', [App\Http\Controllers\MenuController::class, 'getDataAll'])->name('menu.get-data-all');
     Route::resource('menu', App\Http\Controllers\MenuController::class);
     
@@ -243,3 +250,9 @@ Route::get('/statusAdministrasi', function () {
 
 // ini grafik administrasi peserta
 Route::get('/chart-data', [GrafikStatusController::class, 'chartData'])->name('chart.data');
+
+// // ini data ringkasan
+// Route::get('/beranda', [RingkasanController::class, 'ringkasan'])->name('home');
+
+// // ini notifikasi 
+// Route::get('/beranda', [NotifikasiController::class, 'index'])->name('home');

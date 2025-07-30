@@ -31,7 +31,14 @@ public function index()
 {
     $this->checkUserDataCompletion();
 
-    $notifikasi = json_decode(File::get(resource_path('data/notifikasi.json')), true);
+    //    ini notifikasi
+        $notifikasi = DB::table('permintaan_mgng')
+            ->where('status_baca_surat_permintaan', 'belum')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $jumlahBaru = $notifikasi->count();
+    // chart data
     $chartData = [
     'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
     'series' => [
@@ -79,17 +86,50 @@ public function index()
         })
         ->where('status_sertifikat', 'belum')
         ->count();
+    // ini untuk fitur ringkasan
+// Jumlah peserta yang sudah selesai magang
+        $totalSelesai = DB::table('master_psrt')
+            ->where('status_sertifikat', 'terkirim')
+            ->count();
+
+        // Jumlah peserta yang masih aktif (belum terkirim sertifikatnya)
+        $masihAktif = DB::table('master_psrt')
+            ->where(function ($query) {
+                $query->where('status_sertifikat', '!=', 'terkirim')
+                      ->orWhereNull('status_sertifikat');
+            })
+            ->count();
+
+        // Persentase selesai
+        $persentase = round(($totalSelesai / max(1, ($totalSelesai + $masihAktif))) * 100);
+
+        $ringkasan = [
+            [
+                'value' => $totalSelesai,
+                'label' => 'Total Peserta Selesai'
+            ],
+            [
+                'value' => $masihAktif,
+                'label' => 'Masih Aktif Magang'
+            ],
+            [
+                'value' => $persentase,
+                'label' => 'Persentase Selesai'
+            ],
+        ];
 
     // Kirim semua data ke view beranda
     return view('pages.home.index', compact(
         'notifikasi',
         'chartData',
-        'ringkasan',
         'selesai',
-        'belum'
+        'ringkasan',
+        'belum',
+        'jumlahBaru'
     ));
 }
-
 }
+
+
 
 
