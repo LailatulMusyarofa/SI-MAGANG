@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\MasterSklh;
+use App\Models\PermintaanMgng;
+use App\Models\MasterPsrt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -30,14 +32,66 @@ class HomeController extends Controller
 public function index()
 {
     $this->checkUserDataCompletion();
+    // ... existing code ...
 
-    //    ini notifikasi
-        $notifikasi = DB::table('permintaan_mgng')
-            ->where('status_baca_surat_permintaan', 'belum')
-            ->orderBy('created_at', 'desc')
-            ->get();
+ // pastikan ini ada di atas
 
-        $jumlahBaru = $notifikasi->count();
+// Permohonan Baru (7 hari terakhir)
+ // Permohonan Baru
+    $permohonanBaru = DB::table('administrasis')
+        ->where('status_pengajuan', 'belum diproses')
+        ->select('id', 'nama_lembaga', 'created_at')
+        ->get()
+        ->map(function ($item) {
+            return (object)[
+                'tipe'   => 'permohonan',
+                'pesan'  => "Permohonan Magang Baru dari {$item->nama_lembaga}",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_masuk', $item->id),
+                'warna'  => 'blue',
+            ];
+        });
+
+    // Dokumen Perlu Diverifikasi
+    $dokumenPerluDiverifikasi = PermintaanMgng::with(['user', 'masterPsrt', 'masterSklh'])
+        ->where('status_baca_surat_permintaan', 'belum')
+        ->get()
+        ->map(function ($item) {
+            $nama = $item->masterPsrt->nama_peserta ?? 'Peserta';
+            $lembaga = $item->user->fullname ?? 'Lembaga';
+            return (object)[
+                'tipe'   => 'verifikasi',
+                'pesan'  => "$nama dari $lembaga mengajukan permohonan magang",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_masuk', $item->id),
+                'warna'  => 'red',
+            ];
+        });
+
+    // Magang Selesai
+    $magangSelesai = MasterPsrt::with('permintaan')
+        ->where('status_sertifikat', 'terkirim')
+        ->get()
+        ->map(function ($item) {
+            $lembaga = $item->permintaan?->nama_lembaga ?? 'Lembaga';
+            return (object)[
+                'tipe'   => 'selesai',
+                'pesan'  => "{$item->nama_peserta} dari {$lembaga} telah menyelesaikan program magang",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_final.daftar', $item->id),
+                'warna'  => 'green',
+            ];
+        });
+
+    // Gabungkan semua koleksi jadi satu
+    $notifikasi = collect()
+        ->merge($permohonanBaru)
+        ->merge($dokumenPerluDiverifikasi)
+        ->merge($magangSelesai)
+        ->sortByDesc('waktu')   // urutkan terbaru di atas
+        ->take(7);
+
+
     // chart data
     $chartData = [
     'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
@@ -120,12 +174,8 @@ public function index()
 
     // Kirim semua data ke view beranda
     return view('pages.home.index', compact(
-        'notifikasi',
-        'chartData',
-        'selesai',
-        'ringkasan',
-        'belum',
-        'jumlahBaru'
+        'notifikasi', 'chartData', 'selesai', 'ringkasan', 'belum',
+        'permohonanBaru', 'dokumenPerluDiverifikasi', 'magangSelesai'
     ));
 }
 }

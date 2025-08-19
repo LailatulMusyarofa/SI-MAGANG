@@ -53,10 +53,16 @@ class MasterPsrt extends Model
         return $this->hasMany(MasterPsrt::class, 'permintaan_mgng_id');
     }
 
-    public function permintaan()
+//     public function permintaan()
+// {
+//     return $this->belongsTo(PermintaanMgng::class, 'permintaan_mgng_id');
+// }
+public function permintaan()
 {
-    return $this->belongsTo(PermintaanMgng::class, 'permintaan_mgng_id');
+    return $this->belongsTo(\App\Models\PermintaanMgng::class, 'permintaan_mgng_id');
 }
+
+
 public function notaDinas()
 {
     return $this->hasOne(NotaDinas::class, 'permintaan_mgng_id', 'permintaan_mgng_id');
