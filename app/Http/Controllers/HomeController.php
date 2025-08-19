@@ -27,68 +27,79 @@ class HomeController extends Controller
 }
 
     // Fungsi untuk halaman utama
-public function index()
-{
-    $this->checkUserDataCompletion();
-
-    $notifikasi = json_decode(File::get(resource_path('data/notifikasi.json')), true);
-    $chartData = [
-    'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
-    'series' => [
-        [
-            'name' => 'Selesai',
-            'data' => [
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'terkirim')->count(),
-            ]
-        ],
-        [
-            'name' => 'Pending',
-            'data' => [
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'belum')->count(),
-            ]
-        ]
-    ]
-];
-
-    $ringkasan = File::exists(public_path('data/ringkasan.json'))
-        ? json_decode(File::get(public_path('data/ringkasan.json')), true)
-        : [];
-
-    // 🔥 Tambahkan ini:
-    $selesai = DB::table('master_psrt')
-        ->whereNotNull('scan_sertifikat')
-        ->where('status_sertifikat', 'terkirim')
-        ->count();
-
-    $belum = DB::table('master_psrt')
-        ->where(function ($query) {
-            $query->whereNull('scan_sertifikat')
-                  ->orWhere('scan_sertifikat', '');
-        })
-        ->where('status_sertifikat', 'belum')
-        ->count();
-
-    // Kirim semua data ke view beranda
-    return view('pages.home.index', compact(
-        'notifikasi',
-        'chartData',
-        'ringkasan',
-        'selesai',
-        'belum'
-    ));
-}
+    public function index()
+    {
+        $this->checkUserDataCompletion();
+    
+        // Ambil isi notifikasi dari file JSON
+        $notifikasi = json_decode(File::get(resource_path('data/notifikasi.json')), true);
+    
+        // Ambil data peserta dan nama universitas
+        $pesertaData = DB::table('master_psrt')
+            ->join('permintaan_mgng', 'master_psrt.permintaan_mgng_id', '=', 'permintaan_mgng.id')
+            ->join('master_mgng', 'permintaan_mgng.master_mgng_id', '=', 'master_mgng.id')
+            ->join('master_sklh', 'master_mgng.master_sklh_id', '=', 'master_sklh.id')
+            ->select('master_psrt.nama_peserta', 'master_sklh.kabko_sklh as universitas')
+            ->get();
+    
+            $chartData = [
+                'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
+                'series' => [
+                    [
+                        'name' => 'Selesai',
+                        'data' => [
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Pendaftar
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Verifikasi
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Penempatan
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Orientasi
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Pelaksanaan
+                            DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(), // Evaluasi
+                            DB::table('master_psrt')->where('status_sertifikat', 'terkirim')->count(), // Sertifikat
+                        ]
+                    ],
+                    [
+                        'name' => 'Pending',
+                        'data' => [
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Pendaftar
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Verifikasi
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Penempatan
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Orientasi
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Pelaksanaan
+                            DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(), // Evaluasi
+                            DB::table('master_psrt')->where('status_sertifikat', 'belum')->count(), // Sertifikat
+                        ]
+                    ]
+                ]
+            ];
+             // Biarkan bagian ini tetap
+    
+        $ringkasan = File::exists(public_path('data/ringkasan.json'))
+            ? json_decode(File::get(public_path('data/ringkasan.json')), true)
+            : [];
+    
+        $selesai = DB::table('master_psrt')
+            ->whereNotNull('scan_sertifikat')
+            ->where('status_sertifikat', 'terkirim')
+            ->count();
+    
+        $belum = DB::table('master_psrt')
+            ->where(function ($query) {
+                $query->whereNull('scan_sertifikat')
+                      ->orWhere('scan_sertifikat', '');
+            })
+            ->where('status_sertifikat', 'belum')
+            ->count();
+    
+        return view('pages.home.index', compact(
+            'notifikasi',
+            'chartData',
+            'ringkasan',
+            'selesai',
+            'belum',
+            'pesertaData'
+        ));
+    }
+    
 
 }
 
