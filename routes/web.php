@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GrafikStatusController;
 use App\Http\Controllers\HomeController;
 
-
-
-
 Route::middleware('guest')->group(function () {
     Route::get('/', function () { return view('pages.auth.login'); })->name('login');
 
@@ -229,7 +226,6 @@ Route::get('/keluar', function () {
     Auth::logout();
     return redirect('/'); // Ubah ke route login atau beranda sesuai kebutuhanmu
 })->name('master_keluar');
-
 // ini json statusAdministrasi
 Route::get('/statusAdministrasi', function () {
     $path = resource_path('data/statusAdministrasi.json');
