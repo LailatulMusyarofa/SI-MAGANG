@@ -14,11 +14,12 @@
 
                     @if ($user && $user->id === 1)
                         <!-- Print PDF Icon -->
-                        <li class="nav-item me-3 mt-2" >
-                            <a href="" target="_blank   " class="nav-link" title="Cetak PDF">
+                        <li class="nav-item me-3 mt-2">
+                            <a href="{{ route('pdf.cetak') }}" target="_blank" class="nav-link" title="Cetak PDF">
                                 <i class="fas fa-print" style="font-size: 1.2rem;"></i>
                             </a>
                         </li>
+
                         <!-- Notifikasi -->
                         <li class="nav-item">
                             @include('pages.home.fitur.notifikasi')

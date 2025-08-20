@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CetakDashboardController;
 use App\Http\Controllers\EditAdministrasiController;
 use App\Models\EditAdministrasi;
 use Illuminate\Routing\Router;
@@ -268,3 +269,4 @@ Route::get('/chart-data', [GrafikStatusController::class, 'chartData'])->name('c
 
 // // ini notifikasi 
 // Route::get('/beranda', [NotifikasiController::class, 'index'])->name('home');
+Route::get('/beranda/print', [CetakDashboardController::class, 'print'])->name('pdf.cetak');

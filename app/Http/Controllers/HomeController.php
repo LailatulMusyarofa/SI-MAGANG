@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File; //json
 
+use App\Models\NotaDinas;
+use App\Models\NotaDinasItem;
+use App\Models\MasterBdngMember;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class HomeController extends Controller
 {
     // Cek apakah user sudah melengkapi data
@@ -88,8 +93,7 @@ public function index()
         ->merge($dokumenPerluDiverifikasi)
         ->merge($magangSelesai)
         ->sortByDesc('waktu')   // urutkan terbaru di atas
-        ->take(7);
-
+        ->take(7); 
 
     // chart data
     $chartData = [
