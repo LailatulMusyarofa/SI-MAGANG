@@ -27,7 +27,6 @@ class HomeController extends Controller
     // Menyimpan status ke dalam session
     session(['isDataComplete' => $dataExist && $isVerified]);
 }
-
     // Fungsi untuk halaman utama
 public function index()
 {

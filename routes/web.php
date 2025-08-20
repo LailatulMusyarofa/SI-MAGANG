@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GrafikStatusController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CardStatikController;
+use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\MagangChartController;
 use App\Http\Controllers\ProposalMasukController;
 use App\Http\Controllers\UserPermintaanMagangController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\RingkasanController;
 use App\Http\Controllers\NotifikasiController;
-
 
 
 
@@ -228,7 +230,18 @@ Route::get('/master_administrasi/{id}/edit', [AdministrasiController::class, 'ed
 Route::put('/master_administrasi/{id}', [AdministrasiController::class, 'update'])->name('master_administrasi.update');
 Route::delete('/master_administrasi/{id}', [AdministrasiController::class, 'destroy'])->name('master_administrasi.destroy');
 Route::post('/master_administrasi', [AdministrasiController::class, 'store'])->name('master_administrasi.store');
+Route::get('/master_administrasi/create', [AdministrasiController::class, 'create'])->name('master_administrasi.create');
 
+// CardStatikController
+Route::get('/dashboard/card-json', [CardStatikController::class, 'chartData']);
+
+// PendaftaranController
+Route::get('/grafik-pendaftaran/{tahun}', [PendaftaranController::class, 'grafik']);
+Route::get('/pendaftaran', [PendaftaranController::class, 'index']);
+
+// MagangChartController
+Route::get('/dashboard/magang', [MagangChartController::class, 'index']);
+Route::get('/dashboard/magang/chart-data', [MagangChartController::class, 'chartData']);
 
 
 // Logout route
