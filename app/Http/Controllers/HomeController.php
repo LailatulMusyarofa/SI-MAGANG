@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File; //json
 
+use App\Models\NotaDinas;
+use App\Models\NotaDinasItem;
+use App\Models\MasterBdngMember;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class HomeController extends Controller
 {
     // Cek apakah user sudah melengkapi data
@@ -89,8 +94,7 @@ public function index()
         ->merge($dokumenPerluDiverifikasi)
         ->merge($magangSelesai)
         ->sortByDesc('waktu')   // urutkan terbaru di atas
-        ->take(7);
-
+        ->take(7); 
 
     // chart data
     $chartData = [
@@ -178,6 +182,31 @@ public function index()
         'permohonanBaru', 'dokumenPerluDiverifikasi', 'magangSelesai'
     ));
 }
+// public function cetakPdf($id)
+// {   
+//     Carbon::setLocale('id');
+    
+//     $notaDinas = NotaDinas::findOrFail($id);
+    
+//     // Ambil permohonan terkait berdasarkan master_mgng_id
+//     $permintaan = PermintaanMgng::where('master_mgng_id', $notaDinas->master_mgng_id)->firstOrFail();
+
+//     // Ambil peserta yang sudah diassign ke nota dinas lewat nota_dinas_item
+//     $masterPsrtIds = NotaDinasItem::where('nota_dinas_id', $notaDinas->id)->pluck('master_psrt_id');
+//     $peserta = MasterPsrt::whereIn('id', $masterPsrtIds)->get();
+
+//     // Ambil pejabat langsung berdasarkan bdng_member_id di notaDinas
+//     $pejabat = null;
+//     if ($notaDinas->bdng_member_id) {
+//         $pejabat = MasterBdngMember::find($notaDinas->bdng_member_id);
+//     }
+
+//     // Generate PDF dari view, gunakan alias Pdf sesuai import
+//     $pdf = Pdf::loadView('pages.nota_dinas.cetaknotadinas', compact('notaDinas', 'permintaan', 'peserta', 'pejabat'));
+    
+//     // Stream PDF (buka di tab baru)
+//     return $pdf->stream('nota_dinas_' . $notaDinas->nomor_nota_dinas . '.pdf');
+// }
 }
 
 
