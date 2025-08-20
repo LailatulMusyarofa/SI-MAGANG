@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'authorize-access' => AuthorizeAccess::class,
             'check-access' => CheckingAccess::class,
+           
+   
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

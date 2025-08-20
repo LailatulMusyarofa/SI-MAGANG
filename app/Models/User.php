@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\PermintaanMgng;
 
 class User extends Authenticatable
 {
@@ -58,4 +59,9 @@ class User extends Authenticatable
 {
     return $this->belongsTo(Role::class, 'role_id');
 }
+public function permintaanMagang()
+{
+    return $this->hasMany(PermintaanMgng::class, 'id');
+}
+
 }

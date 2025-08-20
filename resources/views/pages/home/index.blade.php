@@ -6,11 +6,25 @@
                 <x-breadcrumb pageTitle="Beranda"></x-breadcrumb>
                 <!-- NOTIFIKASI -->
             <div class="col-auto ms-auto d-flex align-items-center">
-                <ul class="navbar-nav">
-                    @include('pages.home.fitur.notifikasi')
+                <ul class="navbar-nav flex-row align-items-center">
+                    @php
+                        $user = Auth::user();
+                    @endphp
+
+                    @if ($user && $user->id === 1)
+                        <!-- Print PDF Icon -->
+                        <li class="nav-item me-3 mt-2" >
+                            <a href="" target="_blank   " class="nav-link" title="Cetak PDF">
+                                <i class="fas fa-print" style="font-size: 1.2rem;"></i>
+                            </a>
+                        </li>
+                        <!-- Notifikasi -->
+                        <li class="nav-item">
+                            @include('pages.home.fitur.notifikasi')
+                        </li>
+                    @endif
                 </ul>
             </div>
-        </div>
     </x-page-header>
 
     <div class="page-body">

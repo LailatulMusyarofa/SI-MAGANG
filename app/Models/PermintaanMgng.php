@@ -48,4 +48,23 @@ public function balasan2()
 {
     return $this->hasOne(BalasanMgng::class, 'permintaan_mgng_id');
 }
+public function user()
+{
+    return $this->belongsTo(User::class, 'id', 'id'); // sesuaikan
+}
+
+public function masterPsrt()
+{
+    return $this->belongsTo(MasterPsrt::class, 'id', 'permintaan_mgng_id'); // sesuaikan
+}
+public function masterSklh()
+{
+    return $this->belongsTo(MasterSklh::class, 'id_user', 'id');
+}
+
+// public function masterPsrt()
+// {
+//     return $this->hasMany(\App\Models\MasterPsrt::class, 'permintaan_mgng_id');
+// }
+
 }

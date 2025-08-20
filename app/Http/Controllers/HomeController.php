@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\MasterSklh;
+use App\Models\PermintaanMgng;
+use App\Models\MasterPsrt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -30,8 +32,67 @@ class HomeController extends Controller
 public function index()
 {
     $this->checkUserDataCompletion();
+    // ... existing code ...
 
-    $notifikasi = json_decode(File::get(resource_path('data/notifikasi.json')), true);
+ // pastikan ini ada di atas
+
+// Permohonan Baru (7 hari terakhir)
+ // Permohonan Baru
+    $permohonanBaru = DB::table('administrasis')
+        ->where('status_pengajuan', 'belum diproses')
+        ->select('id', 'nama_lembaga', 'created_at')
+        ->get()
+        ->map(function ($item) {
+            return (object)[
+                'tipe'   => 'permohonan',
+                'pesan'  => "Permohonan Magang Baru dari {$item->nama_lembaga}",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_masuk', $item->id),
+                'warna'  => 'blue',
+            ];
+        });
+
+    // Dokumen Perlu Diverifikasi
+    $dokumenPerluDiverifikasi = PermintaanMgng::with(['user', 'masterPsrt', 'masterSklh'])
+        ->where('status_baca_surat_permintaan', 'belum')
+        ->get()
+        ->map(function ($item) {
+            $nama = $item->masterPsrt->nama_peserta ?? 'Peserta';
+            $lembaga = $item->user->fullname ?? 'Lembaga';
+            return (object)[
+                'tipe'   => 'verifikasi',
+                'pesan'  => "$nama dari $lembaga mengajukan permohonan magang",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_masuk', $item->id),
+                'warna'  => 'red',
+            ];
+        });
+
+    // Magang Selesai
+    $magangSelesai = MasterPsrt::with('permintaan')
+        ->where('status_sertifikat', 'terkirim')
+        ->get()
+        ->map(function ($item) {
+            $lembaga = $item->permintaan?->nama_lembaga ?? 'Lembaga';
+            return (object)[
+                'tipe'   => 'selesai',
+                'pesan'  => "{$item->nama_peserta} dari {$lembaga} telah menyelesaikan program magang",
+                'waktu'  => $item->created_at,
+                'link'   => route('proposal_final.daftar', $item->id),
+                'warna'  => 'green',
+            ];
+        });
+
+    // Gabungkan semua koleksi jadi satu
+    $notifikasi = collect()
+        ->merge($permohonanBaru)
+        ->merge($dokumenPerluDiverifikasi)
+        ->merge($magangSelesai)
+        ->sortByDesc('waktu')   // urutkan terbaru di atas
+        ->take(7);
+
+
+    // chart data
     $chartData = [
     'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
     'series' => [
@@ -79,14 +140,42 @@ public function index()
         })
         ->where('status_sertifikat', 'belum')
         ->count();
+    // ini untuk fitur ringkasan
+// Jumlah peserta yang sudah selesai magang
+        $totalSelesai = DB::table('master_psrt')
+            ->where('status_sertifikat', 'terkirim')
+            ->count();
+
+        // Jumlah peserta yang masih aktif (belum terkirim sertifikatnya)
+        $masihAktif = DB::table('master_psrt')
+            ->where(function ($query) {
+                $query->where('status_sertifikat', '!=', 'terkirim')
+                      ->orWhereNull('status_sertifikat');
+            })
+            ->count();
+
+        // Persentase selesai
+        $persentase = round(($totalSelesai / max(1, ($totalSelesai + $masihAktif))) * 100);
+
+        $ringkasan = [
+            [
+                'value' => $totalSelesai,
+                'label' => 'Total Peserta Selesai'
+            ],
+            [
+                'value' => $masihAktif,
+                'label' => 'Masih Aktif Magang'
+            ],
+            [
+                'value' => $persentase,
+                'label' => 'Persentase Selesai'
+            ],
+        ];
 
     // Kirim semua data ke view beranda
     return view('pages.home.index', compact(
-        'notifikasi',
-        'chartData',
-        'ringkasan',
-        'selesai',
-        'belum'
+        'notifikasi', 'chartData', 'selesai', 'ringkasan', 'belum',
+        'permohonanBaru', 'dokumenPerluDiverifikasi', 'magangSelesai'
     ));
 }
 
