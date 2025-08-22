@@ -24,7 +24,7 @@
                 <thead class="bg-gray-200 text-gray-700">
                     <tr>
                         <th class="px-4 py-2 border">Nama</th>
-                        <th class="px-4 py-2 border">Narahubung</th>
+                        <th class="px-4 py-2 border">Narahubung</th> 
                         <th class="px-4 py-2 border">Status Administrasi</th>
                         <th class="px-4 py-2 border">Opsi</th>
                     </tr>
@@ -65,7 +65,7 @@
                             <td class="px-4 py-3 border">
                                 <div class="d-flex flex-wrap gap-2">
                                     {{-- Tombol Edit / Detail --}}
-                                    <form action="{{ route('master_administrasi.edit', $item->id) }}" method="GET">
+                                    <form action="{{ route('master_administrasi.view', $item->id) }}" method="GET">
                                         <button type="submit" class="btn btn-outline-primary btn-sm">Cek Detail</button>
                                     </form>
 

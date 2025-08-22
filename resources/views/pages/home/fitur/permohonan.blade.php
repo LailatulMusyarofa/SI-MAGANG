@@ -53,29 +53,28 @@
 <!-- Tambahkan script -->
 
 <script>
-document.addEventListener("DOMContentLoaded", function() { //elemen dengan ID jumlah-ditandatangani
-    fetch('/dashboard/card-json') //kode ini membuat permintaan ke server
-        .then(response => response.json()) //mengambil data JSON dari respons server
-        .then(res => {
-            const data = res.data; // data berisi informasi yang akan ditampilkan di kartu statistik
+    document.addEventListener("DOMContentLoaded", function() { //elemen dengan ID jumlah-ditandatangani
+        fetch('/dashboard/card-json') //kode ini membuat permintaan ke server
+            .then(response => response.json()) //mengambil data JSON dari respons server
+            .then(res => {
+                const data = res.data; // data berisi informasi yang akan ditampilkan di kartu statistik
 
-            // mengupdate elemen-elemen dengan ID yang sesuai
-            document.getElementById('jumlah-ditandatangani').textContent = data.ditandatangani.jumlah; 
-            document.getElementById('persentase-ditandatangani').textContent = data.ditandatangani.label; 
+                // mengupdate elemen-elemen dengan ID yang sesuai
+                document.getElementById('jumlah-ditandatangani').textContent = data.ditandatangani.jumlah;
+                document.getElementById('persentase-ditandatangani').textContent = data.ditandatangani
+                    .label;
 
-            document.getElementById('jumlah-pending').textContent = data.pending.jumlah; 
-            document.getElementById('persentase-pending').textContent = data.pending.label; 
+                document.getElementById('jumlah-pending').textContent = data.pending.jumlah;
+                document.getElementById('persentase-pending').textContent = data.pending.label;
 
-            document.getElementById('jumlah-aktif').textContent = data.aktif.jumlah;  
-            document.getElementById('persentase-aktif').textContent = data.aktif.label; 
+                document.getElementById('jumlah-aktif').textContent = data.aktif.jumlah;
+                document.getElementById('persentase-aktif').textContent = data.aktif.label;
 
-            document.getElementById('jumlah-lulus').textContent = data.lulus.jumlah; 
-            document.getElementById('persentase-lulus').textContent = data.lulus.label; 
-        })
-        .catch(error => {    
-            console.error('Gagal mengambil data:', error); 
-        });
-});
+                document.getElementById('jumlah-lulus').textContent = data.lulus.jumlah;
+                document.getElementById('persentase-lulus').textContent = data.lulus.label;
+            })
+            .catch(error => {
+                console.error('Gagal mengambil data:', error);
+            });
+    });
 </script>
-
-
