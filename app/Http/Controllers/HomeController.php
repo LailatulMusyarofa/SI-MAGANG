@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File; //json
-
 use App\Models\NotaDinas;
 use App\Models\NotaDinasItem;
 use App\Models\MasterBdngMember;
@@ -20,131 +19,98 @@ class HomeController extends Controller
 {
     // Cek apakah user sudah melengkapi data
     public function checkUserDataCompletion()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Cek apakah user sudah melengkapi data di tabel master_sklh
-    $dataExist = MasterSklh::where('id_user', $user->id)->exists();
+        // Cek apakah user sudah melengkapi data di tabel master_sklh
+        $dataExist = MasterSklh::where('id_user', $user->id)->exists();
 
-    // Memeriksa status verifikasi akun
-    $isVerified = $user->akun_diverifikasi === 'sudah';
+        // Memeriksa status verifikasi akun
+        $isVerified = $user->akun_diverifikasi === 'sudah';
 
-    // Menyimpan status ke dalam session
-    session(['isDataComplete' => $dataExist && $isVerified]);
-}
+        // Menyimpan status ke dalam session
+        session(['isDataComplete' => $dataExist && $isVerified]);
+    }
     // Fungsi untuk halaman utama
-public function index()
-{
-    $this->checkUserDataCompletion();
-    // ... existing code ...
+    public function index()
+    {
+        $this->checkUserDataCompletion();
+        // Permohonan Baru (7 hari terakhir)
+        $permohonanBaru = DB::table('administrasis')
+            ->where('status_pengajuan', 'belum diproses')
+            ->select('id', 'nama_lembaga', 'created_at')
+            ->get()
+            ->map(function ($item) {
+                return (object)[
+                    'tipe'   => 'permohonan',
+                    'pesan'  => "Permohonan Magang Baru dari {$item->nama_lembaga}",
+                    'waktu'  => $item->created_at,
+                    'link'   => route('proposal_masuk', $item->id),
+                    'warna'  => 'blue',
+                ];
+            }
+        );
 
- // pastikan ini ada di atas
+        // Dokumen Perlu Diverifikasi
+        $dokumenPerluDiverifikasi = PermintaanMgng::with(['user', 'masterPsrt', 'masterSklh'])
+            ->where('status_baca_surat_permintaan', 'belum')
+            ->get()
+            ->map(function ($item) {
+                $nama = $item->masterPsrt->nama_peserta ?? '';
+                $lembaga = $item->user->fullname ?? '';
+                return (object)[
+                    'tipe'   => 'verifikasi',
+                    'pesan'  => "$nama - $lembaga mengajukan permohonan magang",
+                    'waktu'  => $item->created_at,
+                    'link'   => route('proposal_masuk', $item->id),
+                    'warna'  => 'red',
+                ];
+            }
+        );
 
-// Permohonan Baru (7 hari terakhir)
- // Permohonan Baru
-    $permohonanBaru = DB::table('administrasis')
-        ->where('status_pengajuan', 'belum diproses')
-        ->select('id', 'nama_lembaga', 'created_at')
-        ->get()
-        ->map(function ($item) {
-            return (object)[
-                'tipe'   => 'permohonan',
-                'pesan'  => "Permohonan Magang Baru dari {$item->nama_lembaga}",
-                'waktu'  => $item->created_at,
-                'link'   => route('proposal_masuk', $item->id),
-                'warna'  => 'blue',
-            ];
-        });
+        // Magang Selesai
+        $magangSelesai = MasterPsrt::with('permintaan')
+            ->where('status_sertifikat', 'terkirim')
+            ->get()
+            ->map(function ($item) {
+                $lembaga = $item->user->fullname ?? '';
+                return (object)[
+                    'tipe'   => 'selesai',
+                    'pesan'  => "{$item->nama_peserta} - {$lembaga} telah menyelesaikan program magang",
+                    'waktu'  => $item->created_at,
+                    'link'   => route('proposal_final.daftar', $item->id),
+                    'warna'  => 'green',
+                ];
+            }
+        );
 
-    // Dokumen Perlu Diverifikasi
-    $dokumenPerluDiverifikasi = PermintaanMgng::with(['user', 'masterPsrt', 'masterSklh'])
-        ->where('status_baca_surat_permintaan', 'belum')
-        ->get()
-        ->map(function ($item) {
-            $nama = $item->masterPsrt->nama_peserta ?? 'Peserta';
-            $lembaga = $item->user->fullname ?? 'Lembaga';
-            return (object)[
-                'tipe'   => 'verifikasi',
-                'pesan'  => "$nama dari $lembaga mengajukan permohonan magang",
-                'waktu'  => $item->created_at,
-                'link'   => route('proposal_masuk', $item->id),
-                'warna'  => 'red',
-            ];
-        });
+        // Gabungkan semua koleksi jadi satu
+        $notifikasi = collect()
+            ->merge($permohonanBaru)
+            ->merge($dokumenPerluDiverifikasi)
+            ->merge($magangSelesai)
+            ->sortByDesc('waktu')   // urutkan terbaru di atas
+            ->take(7); 
 
-    // Magang Selesai
-    $magangSelesai = MasterPsrt::with('permintaan')
-        ->where('status_sertifikat', 'terkirim')
-        ->get()
-        ->map(function ($item) {
-            $lembaga = $item->permintaan?->nama_lembaga ?? 'Lembaga';
-            return (object)[
-                'tipe'   => 'selesai',
-                'pesan'  => "{$item->nama_peserta} dari {$lembaga} telah menyelesaikan program magang",
-                'waktu'  => $item->created_at,
-                'link'   => route('proposal_final.daftar', $item->id),
-                'warna'  => 'green',
-            ];
-        });
+        $ringkasan = File::exists(public_path('data/ringkasan.json'))
+            ? json_decode(File::get(public_path('data/ringkasan.json')), true)
+            : [];
 
-    // Gabungkan semua koleksi jadi satu
-    $notifikasi = collect()
-        ->merge($permohonanBaru)
-        ->merge($dokumenPerluDiverifikasi)
-        ->merge($magangSelesai)
-        ->sortByDesc('waktu')   // urutkan terbaru di atas
-        ->take(7); 
+        // Hitung jumlah peserta magang yang sudah selesai
+        $selesai = DB::table('master_psrt')
+            ->whereNotNull('scan_sertifikat')
+            ->where('status_sertifikat', 'terkirim')
+            ->count();
 
-    // chart data
-    $chartData = [
-    'categories' => ['Pendaftar', 'Verifikasi Dokumen', 'Penempatan Bidang', 'Orientasi', 'Pelaksanaan', 'Evaluasi', 'Sertifikat'],
-    'series' => [
-        [
-            'name' => 'Selesai',
-            'data' => [
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'selesai')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'terkirim')->count(),
-            ]
-        ],
-        [
-            'name' => 'Pending',
-            'data' => [
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'pending')->count(),
-                DB::table('master_psrt')->where('scan_sertifikat', 'belum')->count(),
-            ]
-        ]
-    ]
-];
+        $belum = DB::table('master_psrt')
+            ->where(function ($query) {
+                $query->whereNull('scan_sertifikat')
+                    ->orWhere('scan_sertifikat', '');
+            })
+            ->where('status_sertifikat', 'belum')
+            ->count();
 
-    $ringkasan = File::exists(public_path('data/ringkasan.json'))
-        ? json_decode(File::get(public_path('data/ringkasan.json')), true)
-        : [];
-
-    // 🔥 Tambahkan ini:
-    $selesai = DB::table('master_psrt')
-        ->whereNotNull('scan_sertifikat')
-        ->where('status_sertifikat', 'terkirim')
-        ->count();
-
-    $belum = DB::table('master_psrt')
-        ->where(function ($query) {
-            $query->whereNull('scan_sertifikat')
-                  ->orWhere('scan_sertifikat', '');
-        })
-        ->where('status_sertifikat', 'belum')
-        ->count();
-    // ini untuk fitur ringkasan
-// Jumlah peserta yang sudah selesai magang
+        // Jumlah peserta yang sudah selesai magang
         $totalSelesai = DB::table('master_psrt')
             ->where('status_sertifikat', 'terkirim')
             ->count();
@@ -177,12 +143,11 @@ public function index()
 
     // Kirim semua data ke view beranda
     return view('pages.home.index', compact(
-        'notifikasi', 'chartData', 'selesai', 'ringkasan', 'belum',
+        'notifikasi', 'selesai', 'ringkasan', 'belum',
         'permohonanBaru', 'dokumenPerluDiverifikasi', 'magangSelesai'
-    ));
-}
-
-}
+    )
+);
+}}
 
 
 

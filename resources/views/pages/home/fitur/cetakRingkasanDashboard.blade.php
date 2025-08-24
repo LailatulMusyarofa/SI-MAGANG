@@ -69,17 +69,18 @@
         <b>{{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y') }}</b>, bersama ini disampaikan ringkasan capaian sebagai berikut:
         <br><br>
 
-        Jumlah pendaftar magang yang belum ditangani tercatat sebanyak <b>200</b> mahasiswa, 
-        permohonan pending sebanyak <b>13</b> mahasiswa. Saat ini terdapat <b>17</b> mahasiswa aktif magang, 
-        dan sebanyak <b>134</b> mahasiswa dinyatakan lulus bulan ini dengan persentase kelulusan <b>88%</b>.
+        Jumlah permohonan yang belum ditangani atau masih dalam status <i>pending</i> tercatat sebanyak <b>{{ $pending }}</b> mahasiswa. 
+        Jumlah permohonan magang yang sudah ditangani tercatat sebanyak <b>{{ $pendaftar }}</b> mahasiswa, 
+        Saat ini terdapat <b>{{$aktif}}</b> mahasiswa aktif magang, 
+        dan sebanyak <b>{{$lulus}}</b> mahasiswa dinyatakan lulus bulan ini dengan persentase kelulusan <b>{{$persentase}}%</b>.
         <br><br>
 
-        Distribusi Peserta Magang per Bidang menunjukkan bahwa:
+        {{-- Distribusi Peserta Magang per Bidang menunjukkan bahwa:
         <ol>
             <li>Bidang Aplikasi Informatika menerima jumlah peserta terbanyak.</li>
             <li>Bidang Persandian dan Statistik mencatat jumlah peserta menengah.</li>
             <li>Bidang Informasi Publik dan Komunikasi relatif memiliki jumlah peserta lebih sedikit.</li>
-        </ol>
+        </ol> --}}
 
         Rekap Status Administrasi memperlihatkan bahwa sebagian besar peserta telah menyelesaikan dokumen wajib, meliputi: 
         <i>Surat Permohonan Magang, Proposal Magang, serta Laporan Magang</i>.
@@ -96,34 +97,34 @@
         </thead>
         <tbody>
             <tr>
-                <td>Pendaftaran</td>
-                <td>0 Mahasiswa</td>
-                <td>13 Mahasiswa</td>
-            </tr>
+                <td>Peserta</td>
+                <td>{{$peserta}} Mahasiswa</td>
+                <td>{{$pesertaSelesai}} Mahasiswa</td>
+            </tr>   
             <tr>
                 <td>Verifikasi Berkas</td>
-                <td>0 Mahasiswa</td>
-                <td>13 Mahasiswa</td>
+                <td>{{$verifikasiBerkas}} Mahasiswa</td>
+                <td>{{$verifikasiBerkasSelesai}} Mahasiswa</td>
             </tr>
             <tr>
                 <td>Persetujuan Pimpinan</td>
-                <td>0 Mahasiswa</td>
-                <td>13 Mahasiswa</td>
+                <td>{{$persetujuanPimpinan}} Mahasiswa</td>
+                <td>{{$persetujuanPimpinanSelesai}} Mahasiswa</td>
             </tr>
             <tr>
                 <td>Proses Magang</td>
-                <td>9 Mahasiswa</td>
-                <td>13 Mahasiswa</td>
+                <td>{{$prosesMagang}} Mahasiswa</td>
+                <td>{{$prosesMagangSelesai}} Mahasiswa</td>
             </tr>
             <tr>
                 <td>Evaluasi</td>
-                <td>9 Mahasiswa</td>
-                <td>13 Mahasiswa</td>
+                <td>{{$evaluasi}} Mahasiswa</td>
+                <td>{{$evaluasiSelesai}} Mahasiswa</td>
             </tr>
             <tr>
                 <td>Sertifikat</td>
-                <td>0 Mahasiswa</td>
-                <td>0 Mahasiswa</td>
+                <td>{{$sertifikat}} Mahasiswa</td>
+                <td>{{$sertifikatSelesai}} Mahasiswa</td>
             </tr>
         </tbody>
     </table>
