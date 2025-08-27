@@ -227,7 +227,7 @@ Route::post('password/reset', function (Illuminate\Http\Request $request) {
 
 // daftar administrator
 Route::get('/master_administrasi', [AdministrasiController::class, 'index'])->name('master_administrasi');
-Route::get('/master_administrasi/{id}/edit', [AdministrasiController::class, 'edit'])->name('master_administrasi.edit');
+Route::get('/master_administrasi/{id}/view', [AdministrasiController::class, 'view'])->name('master_administrasi.view');
 Route::put('/master_administrasi/{id}', [AdministrasiController::class, 'update'])->name('master_administrasi.update');
 Route::delete('/master_administrasi/{id}', [AdministrasiController::class, 'destroy'])->name('master_administrasi.destroy');
 Route::post('/master_administrasi', [AdministrasiController::class, 'store'])->name('master_administrasi.store');
@@ -248,8 +248,9 @@ Route::get('/dashboard/magang/chart-data', [MagangChartController::class, 'chart
 // Logout route
 Route::get('/keluar', function () {
     Auth::logout();
-    return redirect('/'); // Ubah ke route login atau beranda sesuai kebutuhanmu
+    return redirect('/'); 
 })->name('master_keluar');
+
 // ini json statusAdministrasi
 Route::get('/statusAdministrasi', function () {
     $path = resource_path('data/statusAdministrasi.json');

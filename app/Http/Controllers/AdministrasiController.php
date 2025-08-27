@@ -38,10 +38,10 @@ class AdministrasiController extends Controller
 }
 
 
-    public function edit($id)
+    public function view($id)
     {
         $item = Administrasi::findOrFail($id);
-        return view('pages.master_administrasi.edit', compact('item'));
+        return view('pages.master_administrasi.view', compact('item'));
     }
 
     public function update(Request $request, $id)
