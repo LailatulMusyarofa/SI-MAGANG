@@ -270,3 +270,4 @@ Route::get('/chart-data', [GrafikStatusController::class, 'chartData'])->name('c
 // // ini notifikasi 
 // Route::get('/beranda', [NotifikasiController::class, 'index'])->name('home');
 Route::get('/beranda/print', [CetakDashboardController::class, 'print'])->name('pdf.cetak');
+Route::get('/notifications', [App\Http\Controllers\NotifikasiUserController::class, 'index'])->name('notifications.index');

@@ -22,7 +22,14 @@
                                                     <li class="nav-item">
                                                         @include('pages.home.fitur.notifikasi')
                                                     </li>
-                                                @endif
+                                                @else
+                                                    <!-- Notifikasi untuk user selain id 1 -->
+                                                    <li class="nav-item">
+                                                        @include('pages.home.fitur.notifikasiUser')
+                                                    </li>
+                                                    <h1 data-countup="134"></h1>
+                                                    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+                                                @endif                           
                                             </ul>
                                         </div>
                                 </x-page-header>
