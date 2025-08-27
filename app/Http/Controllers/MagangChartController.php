@@ -40,7 +40,8 @@ class MagangChartController extends Controller
             'Bidang Komunikasi Publik',
             'Bidang Persandian dan Keamanan'
         ];
-        
+
+            // Mengambil data bidang magang yang lulus
         $lulus = DB::table('master_psrt')
             ->join('master_bdng_member', 'master_psrt.id_bdng_member', '=', 'master_bdng_member.id')
             ->join('master_bdng', 'master_bdng_member.id_bdng', '=', 'master_bdng.id')
@@ -52,11 +53,14 @@ class MagangChartController extends Controller
             ->get();
         
 
-        // === Kartu Statistik ===
+        // === Kartu Tingkat Penerimaan ===
         $totalPendaftar = DB::table('master_psrt')->count();
         $totalLulus = DB::table('master_psrt')->where('status_sertifikat', 'terkirim')->count();
         $persentaseDiterima = $totalPendaftar > 0 ? round(($totalLulus / $totalPendaftar) * 100) : 0;
 
+
+
+        // === Durasi Magang Rata-Rata ===
         $durasi = DB::table('balasan_mgng')
             ->selectRaw('AVG(DATEDIFF(tanggal_akhir_magang, tanggal_awal_magang)) as rata_rata')
             ->first();

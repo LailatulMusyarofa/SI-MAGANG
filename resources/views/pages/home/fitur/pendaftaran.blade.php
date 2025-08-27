@@ -21,7 +21,7 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let tahun = 2025;
+        let tahun = 2025; // Tahun awal yang ditampilkan sesuai dengan tahun saat ini
         const chartElement = document.getElementById('chart-demo-area');
         const tahunText = document.getElementById('tahun-text');
         let chart;

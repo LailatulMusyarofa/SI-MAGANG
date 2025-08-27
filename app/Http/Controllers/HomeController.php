@@ -130,7 +130,7 @@ public function index()
         ? json_decode(File::get(public_path('data/ringkasan.json')), true)
         : [];
 
-    // 🔥 Tambahkan ini:
+    // Tambahkan ini:
     $selesai = DB::table('master_psrt')
         ->whereNotNull('scan_sertifikat')
         ->where('status_sertifikat', 'terkirim')

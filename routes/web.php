@@ -248,8 +248,9 @@ Route::get('/dashboard/magang/chart-data', [MagangChartController::class, 'chart
 // Logout route
 Route::get('/keluar', function () {
     Auth::logout();
-    return redirect('/'); // Ubah ke route login atau beranda sesuai kebutuhanmu
+    return redirect('/'); 
 })->name('master_keluar');
+
 // ini json statusAdministrasi
 Route::get('/statusAdministrasi', function () {
     $path = resource_path('data/statusAdministrasi.json');
