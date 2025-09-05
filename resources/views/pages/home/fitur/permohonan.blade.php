@@ -1,79 +1,47 @@
-<div class="row row-deck" id="statistik-cards">
-    <!-- Isi statik dulu, akan diubah JS -->
-    <div class="col-md-3 mb-3">
-        <div class="card h-100 shadow-sm border-0" style="border-radius: 50px;">
-            <div class="card-body text-center" style="background-color:rgb(227, 255, 233); border-radius: 10px;">
-                <p class="card-text text-muted">Permohonan Ditangani</p>
-                <h1 id="jumlah-ditandatangani">90</h1>
-                <p class="card-text text-muted">Sudah diproses admin</p>
-                <p class="text-success" id="persentase-ditandatangani">↗ 12% dari bulan lalu</p>
+<div class="container-fluid">
+    <div class="row g-3">
+        <!-- Permohonan Ditangani -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center" style="border-radius: 20px; background-color: #eaffea;">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h6 class="text-muted mb-2">Permohonan Ditangani</h6>
+                    <h3 class="fw-bold mb-2">{{ $permohonanDitangani ?? 12}}</h3>
+                    <p class="text-muted small mb-1">Sudah diproses admin</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Tambahkan 3 card lainnya: pending, aktif, lulus (mirip) -->
-
-    <!-- Pending -->
-    <div class="col-md-3 mb-3">
-        <div class="card h-100 shadow-sm border-0" style="border-radius: 50px;">
-            <div class="card-body text-center" style="background-color:rgb(255, 239, 188);">
-                <p class="card-text text-muted">Permohonan Pending</p>
-                <h1 id="jumlah-pending">10</h1>
-                <p class="card-text text-muted">Menunggu tindak lanjut</p>
-                <p class="text-danger" id="persentase-pending">↘ 5% dari bulan lalu</p>
+        <!-- Permohonan Pending -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center" style="border-radius: 20px; background-color: #fff6d9;">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h6 class="text-muted mb-2">Permohonan Pending</h6>
+                    <h3 class="fw-bold mb-2">{{ $permohonanPending ?? 0}}</h3>
+                    <p class="text-muted small mb-1">Menunggu tindak lanjut</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Magang Aktif -->
-    <div class="col-md-3 mb-3">
-        <div class="card h-100 shadow-sm border-0" style="border-radius: 50px;">
-            <div class="card-body text-center" style="background-color:rgb(192, 235, 253);">
-                <p class="card-text text-muted">Total Magang Aktif</p>
-                <h1 id="jumlah-aktif">8</h1>
-                <p class="card-text text-muted">Sedang menjalani program</p>
-                <p class="text-success" id="persentase-aktif">↗ 8% dari bulan lalu</p>
+        <!-- Total Magang Aktif -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center" style="border-radius: 20px; background-color: #e6f5ff;">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h6 class="text-muted mb-2">Total Magang Aktif</h6>
+                    <h3 class="fw-bold mb-2">{{ $magangAktif ?? 11}}</h3>
+                    <p class="text-muted small mb-1">Sedang menjalani program</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Lulus Bulan Ini-->
-    <div class="col-md-3 mb-3">
-        <div class="card h-100 shadow-sm border-0" style="border-radius: 50px;">
-            <div class="card-body text-center" style="background-color:rgb(227, 255, 233);">
-                <p class="card-text text-muted">Lulus Bulan Ini</p>
-                <h1 id="jumlah-lulus">11</h1>
-                <p class="card-text text-muted">Berhasil menyelesaikan</p>
-                <p class="text-success" id="persentase-lulus">↗ 15% dari bulan lalu</p>
+        <!-- Lulus Bulan Ini -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center" style="border-radius: 20px; background-color: #eaffea;">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <h6 class="text-muted mb-2">Lulus Bulan Ini</h6>
+                    <h3 class="fw-bold mb-2">{{ $lulusBulanIni ?? 8}}</h3>
+                    <p class="text-muted small mb-1">Berhasil menyelesaikan</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Tambahkan script -->
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('/dashboard/card-json')
-            .then(response => response.json())
-            .then(res => {
-                const data = res.data;
-
-                // Update elements with corresponding IDs
-                document.getElementById('jumlah-ditandatangani').textContent = data.ditandatangani.jumlah;
-                document.getElementById('persentase-ditandatangani').textContent = data.ditandatangani.label;
-
-                document.getElementById('jumlah-pending').textContent = data.pending.jumlah;
-                document.getElementById('persentase-pending').textContent = data.pending.label;
-
-                document.getElementById('jumlah-aktif').textContent = data.aktif.jumlah;
-                document.getElementById('persentase-aktif').textContent = data.aktif.label;
-
-                document.getElementById('jumlah-lulus').textContent = data.lulus.jumlah;
-                document.getElementById('persentase-lulus').textContent = data.lulus.label;
-            })
-            .catch(error => {
-                console.error('Gagal mengambil data:', error);
-            });
-    });
-</script>

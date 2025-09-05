@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\GrafikStatusController;
 use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\CardStatikController;
 use App\Http\Controllers\CardStatikController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\MagangChartController;
@@ -234,7 +235,10 @@ Route::post('/master_administrasi', [AdministrasiController::class, 'store'])->n
 Route::get('/master_administrasi/create', [AdministrasiController::class, 'create'])->name('master_administrasi.create');
 
 // CardStatikController
-Route::get('/dashboard/card-json', [CardStatikController::class, 'chartData']);
+// Halaman beranda → tampilkan statistik permohonan
+Route::get('/permohonan', [CardStatikController::class, 'index'])->name('permohonan');
+
+
 
 // PendaftaranController
 Route::get('/grafik-pendaftaran/{tahun}', [PendaftaranController::class, 'grafik']);
