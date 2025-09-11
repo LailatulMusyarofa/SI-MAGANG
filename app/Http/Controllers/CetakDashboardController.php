@@ -48,6 +48,7 @@ class CetakDashboardController extends Controller
         $query->whereNull('scan_surat_balasan')
               ->orWhere('scan_surat_balasan', '');
         })
+        
         ->count();
         // Jumlah peserta yang sudah persetujuan pimpinan
         $persetujuanPimpinanAktif = DB::table('balasan_mgng')

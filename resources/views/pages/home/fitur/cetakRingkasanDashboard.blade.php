@@ -70,7 +70,7 @@
         <br><br>
 
         Jumlah permohonan yang belum ditangani atau masih dalam status <i>pending</i> tercatat sebanyak <b>{{ $pending }}</b> mahasiswa. 
-        Jumlah permohonan magang yang sudah ditangani tercatat sebanyak <b>{{ $pendaftar }}</b> mahasiswa, 
+        Jumlah permohonan magang yang sudah ditangani tercatat sebanyak <b>{{$verifikasiBerkas}}</b> mahasiswa, 
         Saat ini terdapat <b>{{$aktif}}</b> mahasiswa aktif magang, 
         dan sebanyak <b>{{$lulus}}</b> mahasiswa dinyatakan lulus bulan ini dengan persentase kelulusan <b>{{$persentase}}%</b>.
         <br><br>
