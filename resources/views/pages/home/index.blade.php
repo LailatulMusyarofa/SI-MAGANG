@@ -23,6 +23,11 @@
                                                         <li class="nav-item">
                                                             @include('pages.home.fitur.notifikasi')
                                                         </li>
+                                                    @else
+                                                        <!-- Notifikasi -->
+                                                        <li class="nav-item">
+                                                            @include('pages.home.fitur.notifikasiUser')
+                                                        </li>
                                                     @endif
                                                 </ul>
                                             </div>
@@ -59,16 +64,16 @@
                                                         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                                                     @endif
                                                 </div>
-                            </x-app-layout>
+                                </x-app-layout>
                             </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>

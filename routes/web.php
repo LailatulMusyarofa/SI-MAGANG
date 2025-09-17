@@ -22,10 +22,8 @@ use App\Http\Controllers\UserPermintaanMagangController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\RingkasanController;
 use App\Http\Controllers\NotifikasiController;
-
-
-
-
+use App\Http\Controllers\NotifikasiUserController;
+use App\Http\Controllers\NotifUserController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', function () { return view('pages.auth.login'); })->name('login');
@@ -269,9 +267,6 @@ Route::get('/statusAdministrasi', function () {
 // ini grafik administrasi peserta
 Route::get('/chart-data', [GrafikStatusController::class, 'chartData'])->name('chart.data');
 
-// // ini data ringkasan
-// Route::get('/beranda', [RingkasanController::class, 'ringkasan'])->name('home');
-
-// // ini notifikasi 
-// Route::get('/beranda', [NotifikasiController::class, 'index'])->name('home');
 Route::get('/beranda/print', [CetakDashboardController::class, 'print'])->name('pdf.cetak');
+
+Route::get('/notifikasi', [NotifikasiUserController::class, 'notifikasi'])->name('user.notifikasi');

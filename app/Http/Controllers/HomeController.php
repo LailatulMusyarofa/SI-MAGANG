@@ -141,6 +141,9 @@ class HomeController extends Controller
             ],
         ];
 
+
+
+        
     // Kirim semua data ke view beranda
     return view('pages.home.index', compact(
         'notifikasi', 'selesai', 'ringkasan', 'belum',
